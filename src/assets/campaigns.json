@@ -1,0 +1,47 @@
+﻿[
+  {
+    "name": "The Dunwich Legacy",
+    "cycle_position": 2,
+    "codes": ["dwl", "tmm", "tece", "bota", "uau", "wda", "litas"]
+  },
+  {
+    "name": "The Path to Carcosa",
+    "cycle_position": 3,
+    "codes": ["ptc", "eotp", "tuo", "apot", "tpm", "bsr", "dca"]
+  },
+  {
+    "name": "The Forgotten Age",
+    "cycle_position": 4,
+    "codes": ["tfa", "tof", "tbb", "hote", "tcoa", "tdoy", "sha"]
+  },
+  {
+    "name": "The Circle Undone",
+    "cycle_position": 5,
+    "codes": ["tcu", "tsn", "wos", "fgg", "uad", "icc", "bbt"]
+  },
+  {
+    "name": "The Dream-Eaters",
+    "cycle_position": 6,
+    "codes": ["tde", "sfk", "tsh", "dsm", "pnr", "wgd", "woc"]
+  },
+  {
+    "name": "The Innsmouth Conspiracy",
+    "cycle_position": 7,
+    "codes": ["tic", "itd", "def", "hhg", "lif", "lod", "itm"]
+  },
+  {
+    "name": "Edge of the Earth",
+    "cycle_position": 8,
+    "codes": ["eoep", "eoec"]
+  },
+  {
+    "name": "The Scarlet Keys",
+    "cycle_position": 9,
+    "codes": ["tskp", "tskc"]
+  },
+  {
+    "name": "The Feast of Hemlock Vale",
+    "cycle_position": 10,
+    "codes": ["fhvc", "fhvp"]
+  }
+]
