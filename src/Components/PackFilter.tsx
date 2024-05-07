@@ -1,5 +1,5 @@
 ﻿import {Campaign, Pack} from "../types.ts";
-import {Checkbox, ScrollShadow, Spinner} from "@nextui-org/react";
+import {Checkbox, Spinner} from "@nextui-org/react";
 import {useFilterStore, usePageStore} from "../stores.ts";
 import campaign_list from "../assets/campaigns.json"
 
@@ -18,8 +18,7 @@ export default function PackFilter({ packs }: { packs: Pack[] | undefined }) {
         return <Spinner/>
     }
 
-    return <div className="p-2 h-1/2">
-        <ScrollShadow className="overflow-x-hidden w-full h-full">
+    return <div className="p-2 h-1/2 overflow-auto">
         {
             packs
                 .sort((a, b) => a.cycle_position - b.cycle_position)
@@ -27,7 +26,6 @@ export default function PackFilter({ packs }: { packs: Pack[] | undefined }) {
                     return <PackSelector key={pack.code} pack={pack} campaigns={campaigns}/>
                 })
         }
-        </ScrollShadow>
     </div>
 }
 
