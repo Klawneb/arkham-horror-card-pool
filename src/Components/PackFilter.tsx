@@ -1,6 +1,6 @@
 ﻿import {Campaign, Pack} from "../types.ts";
 import {Checkbox, Spinner} from "@nextui-org/react";
-import {useFilterStore} from "../stores.ts";
+import {useFilterStore, usePageStore} from "../stores.ts";
 import campaign_list from "../assets/campaigns.json"
 
 function getCampaigns() {
@@ -31,6 +31,7 @@ export default function PackFilter({ packs }: { packs: Pack[] | undefined }) {
 
 function PackSelector({ pack, campaigns }: { pack: Pack, campaigns: Map<number, Campaign> }) {
     const filterStore = useFilterStore();
+    const pageStore = usePageStore();
     
     function handlePackChange(isSelected: boolean) {
         if (isSelected) {
@@ -38,6 +39,7 @@ function PackSelector({ pack, campaigns }: { pack: Pack, campaigns: Map<number, 
         } else {
             filterStore.removeCode(pack.code);
         }
+        pageStore.setPage(1)
     }
     
     function handleCampaignChange(isSelected: boolean) {
@@ -50,6 +52,7 @@ function PackSelector({ pack, campaigns }: { pack: Pack, campaigns: Map<number, 
                     filterStore.removeCode(code);
                 }
             }
+            pageStore.setPage(1)
         }
     }
     

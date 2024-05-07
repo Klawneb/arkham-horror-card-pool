@@ -1,16 +1,18 @@
 ﻿import {useQuery} from "@tanstack/react-query";
 import {Image, Modal, ModalBody, ModalContent, Pagination, Spinner, useDisclosure} from "@nextui-org/react";
 import {Card} from "../types.ts";
-import {useFilterStore} from "../stores.ts";
+import {useFilterStore, usePageStore} from "../stores.ts";
 import {RefObject, useEffect, useRef, useState} from "react";
+import {useAutoAnimate} from "@formkit/auto-animate/react";
 
 export default function CardDisplay() {
     const cards = useQuery({queryKey: ["cards"], queryFn: getCards});
     const filterStore = useFilterStore();
-    const cardDisplay = useRef<HTMLDivElement>(null);
+    const cardDisplayRef = useRef<HTMLDivElement>(null);
     const [cardsVisible, setCardsVisible] = useState(0)
-    const [page, setPage] = useState(1);
+    const pageStore = usePageStore()
     const filteredCards = filterCode(cards.data ? cards.data : [])
+    const [animationParent] = useAutoAnimate()
 
     useEffect(() => {
         function updateCardsVisible(cardDisplay: RefObject<HTMLDivElement>) {
@@ -22,10 +24,10 @@ export default function CardDisplay() {
         }
 
         window.addEventListener("resize", () => {
-            updateCardsVisible(cardDisplay);
+            updateCardsVisible(cardDisplayRef);
         })
 
-        updateCardsVisible(cardDisplay);
+        updateCardsVisible(cardDisplayRef);
         return () => {
             window.removeEventListener("resize", () => {
             })
@@ -49,25 +51,28 @@ export default function CardDisplay() {
     }
 
     if (cards.data === undefined) {
-        return <div ref={cardDisplay} className="flex flex-grow items-center justify-center">
+        return <div ref={cardDisplayRef} className="flex flex-grow items-center justify-center">
             <Spinner label="Loading cards..." size="lg"/>
         </div>
     }
 
     return <div className="flex flex-grow flex-col">
-        <div ref={cardDisplay}
-             className="flex-grow grid grid-rows-[repeat(auto-fit,minmax(280px,1fr))] grid-cols-[repeat(auto-fit,minmax(202px,1fr))] overflow-hidden">
-            {
-                filteredCards
-                    .slice(cardsVisible * (page - 1), cardsVisible * page)
-                    .map((card) => {
-                        return <CardInstance key={crypto.randomUUID()} card={card}/>
-                    })
-            }
+        <div ref={cardDisplayRef}
+             className="flex-grow ">
+            <div ref={animationParent} className="w-full h-full grid grid-rows-[repeat(auto-fit,minmax(280px,1fr))] grid-cols-[repeat(auto-fit,minmax(202px,1fr))] overflow-hidden">
+                {
+                    filteredCards
+                        .slice(cardsVisible * (pageStore.page - 1), cardsVisible * pageStore.page)
+                        .map((card) => {
+                            return <CardInstance key={crypto.randomUUID()} card={card}/>
+                        })
+                }
+            </div>
+            
         </div>
         <div className="h-10 flex items-center justify-center w-full overflow-hidden">
-            <Pagination total={Math.floor(filteredCards.length / cardsVisible)} className="pf-0" page={page}
-                        onChange={setPage}/>
+            <Pagination total={Math.floor(filteredCards.length / cardsVisible)} className="pf-0" page={pageStore.page}
+                        onChange={pageStore.setPage}/>
         </div>
     </div>
 }
@@ -86,7 +91,8 @@ function CardInstance({card}: { card: Card }) {
                         <Image src={"https://arkhamdb.com/" + card.imagesrc} height={600} width={432}
                                className="min-w-[432px] min-h-[600px]"/>
                         <div className="p-10 flex flex-col">
-                            <p className="text-xl text-foreground"><span className="font-bold tracking-wide">Cost:</span> {card.cost}</p>
+                            <p className="text-xl text-foreground"><span
+                                className="font-bold tracking-wide">Cost:</span> {card.cost}</p>
                             <p className="text-xl text-foreground">XP: {card.xp}</p>
                             <p className="text-xl text-foreground">Faction: {card.faction_name}</p>
                             <div className="flex-grow flex items-center justify-center">
