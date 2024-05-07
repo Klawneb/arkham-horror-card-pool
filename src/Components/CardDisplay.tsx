@@ -4,6 +4,7 @@ import {Card} from "../types.ts";
 import {useFilterStore, usePageStore} from "../stores.ts";
 import {RefObject, useEffect, useRef, useState} from "react";
 import {useAutoAnimate} from "@formkit/auto-animate/react";
+import parse from "html-react-parser"
 
 export default function CardDisplay() {
     const cards = useQuery({queryKey: ["cards"], queryFn: getCards});
@@ -91,12 +92,15 @@ function CardInstance({card}: { card: Card }) {
                         <Image src={"https://arkhamdb.com/" + card.imagesrc} height={600} width={432}
                                className="min-w-[432px] min-h-[600px]"/>
                         <div className="p-10 flex flex-col">
-                            <p className="text-xl text-foreground"><span
-                                className="font-bold tracking-wide">Cost:</span> {card.cost}</p>
-                            <p className="text-xl text-foreground">XP: {card.xp}</p>
-                            <p className="text-xl text-foreground">Faction: {card.faction_name}</p>
+                            <p className="text-3xl text-foreground font-bold mb-4">{card.name}</p>
+                            <p className="text-xl text-foreground">
+                                <span className="font-bold tracking-wide whitespace-pre">Cost: </span>{card.cost ?? 0}</p>
+                            <p className="text-xl text-foreground">
+                                <span className="font-bold tracking-wide whitespace-pre">XP: </span>{card.xp ?? 0}</p>
+                            <p className="text-xl text-foreground">
+                                <span className="font-bold tracking-wide whitespace-pre">Faction: </span>{card.faction_name}</p>
                             <div className="flex-grow flex items-center justify-center">
-                                <p className="text-xl text-foreground">Text: {card.text}</p>
+                                <p className="text-xl text-foreground">{parse(card.text)}</p>
                             </div>
                             <p className="text-xl text-foreground font-bold">{card.pack_name}</p>
                         </div>
