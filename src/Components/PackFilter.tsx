@@ -1,5 +1,5 @@
 ﻿import {Campaign, Pack} from "../types.ts";
-import {Checkbox, Spinner} from "@nextui-org/react";
+import {Checkbox, ScrollShadow, Spinner} from "@nextui-org/react";
 import {useFilterStore, usePageStore} from "../stores.ts";
 import campaign_list from "../assets/campaigns.json"
 
@@ -18,7 +18,8 @@ export default function PackFilter({ packs }: { packs: Pack[] | undefined }) {
         return <Spinner/>
     }
 
-    return <div className="p-2">
+    return <div className="p-2 h-1/2">
+        <ScrollShadow className="overflow-auto w-full h-full" hideScrollBar>
         {
             packs
                 .sort((a, b) => a.cycle_position - b.cycle_position)
@@ -26,6 +27,7 @@ export default function PackFilter({ packs }: { packs: Pack[] | undefined }) {
                     return <PackSelector key={pack.code} pack={pack} campaigns={campaigns}/>
                 })
         }
+        </ScrollShadow>
     </div>
 }
 
@@ -63,9 +65,7 @@ function PackSelector({ pack, campaigns }: { pack: Pack, campaigns: Map<number, 
             </div>
             :
             null
-        }   
-        <Checkbox onValueChange={handlePackChange} isSelected={filterStore.filter.codes.has(pack.code)}
-                  className={`${campaigns.has(pack.cycle_position) ? "ml-2" : ""}`}
-        >{pack.name}</Checkbox>
+        }
+        <Checkbox className={`${campaigns.has(pack.cycle_position) ? "ml-3" : ""}`} onValueChange={handlePackChange} isSelected={filterStore.filter.codes.has(pack.code)}>{pack.name}</Checkbox>
     </div>
 }

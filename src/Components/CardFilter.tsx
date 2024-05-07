@@ -12,8 +12,8 @@ async function getPacks(): Promise<Pack[]> {
 export default function CardFilterSelector() {
     const packs = useQuery({ queryKey: ["packs"], queryFn: getPacks})
     
-    return <div className="w-96 overflow-auto">
-        <Card>
+    return <div className="w-96 h-screen">
+        <Card className="flex flex-col h-full">
             <PackFilter packs={packs.data}/>
         </Card>
     </div>
