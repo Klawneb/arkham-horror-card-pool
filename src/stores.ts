@@ -1,18 +1,28 @@
 ﻿import {create} from "zustand";
-import {Filter} from "./types.ts";
+
+export interface Filter {
+    codes: Set<string>,
+    searchTerm: string,
+    searchType: string
+}
 
 interface FilterState {
     filter: Filter,
     addCode: (code: string) => void,
     removeCode: (code: string) => void,
+    setSearchTerm: (searchTerm: string) => void,
+    setSearchType: (searchType: string) => void,
 }
 
 export const useFilterStore = create<FilterState>()((set) => ({
     filter: {
         codes: new Set<string>(),
+        searchTerm: "",
+        searchType: "title"
     },
     addCode: (code: string) => set((state) => ({
         filter: {
+            ...state.filter,
             codes: new Set<string>(state.filter.codes).add(code)
         }
     })),
@@ -21,10 +31,23 @@ export const useFilterStore = create<FilterState>()((set) => ({
         newSet.delete(code);
         return {
             filter: {
+                ...state.filter,
                 codes: newSet
             }
         }
-    })
+    }),
+    setSearchTerm: (searchTerm: string) => set((state) => ({
+        filter: {
+            ...state.filter,
+            searchTerm: searchTerm
+        }
+    })),
+    setSearchType: (searchType: string) => set((state) => ({
+        filter: {
+            ...state.filter,
+            searchType: searchType
+        }
+    }))
 }))
 
 interface PageState {

@@ -5,6 +5,7 @@ import {useFilterStore, usePageStore} from "../stores.ts";
 import {RefObject, useEffect, useRef, useState} from "react";
 import {useAutoAnimate} from "@formkit/auto-animate/react";
 import parse from "html-react-parser"
+import {filterCards} from "../cardFilter.ts";
 
 export default function CardDisplay() {
     const cards = useQuery({queryKey: ["cards"], queryFn: getCards});
@@ -12,7 +13,7 @@ export default function CardDisplay() {
     const cardDisplayRef = useRef<HTMLDivElement>(null);
     const [cardsVisible, setCardsVisible] = useState(0)
     const pageStore = usePageStore()
-    const filteredCards = filterCode(cards.data ? cards.data : [])
+    const filteredCards = filterCards(filterStore.filter, cards.data ? cards.data : [])
     const [animationParent] = useAutoAnimate()
 
     useEffect(() => {
@@ -41,16 +42,6 @@ export default function CardDisplay() {
         return await cards.json();
     }
 
-    function filterCode(cards: Card[]) {
-        if (filterStore.filter.codes.size === 0) {
-            return cards;
-        }
-
-        return cards.filter((card) => {
-            return filterStore.filter.codes.has(card.pack_code)
-        })
-    }
-
     if (cards.data === undefined) {
         return <div ref={cardDisplayRef} className="flex flex-grow items-center justify-center">
             <Spinner label="Loading cards..." size="lg"/>
@@ -60,16 +51,17 @@ export default function CardDisplay() {
     return <div className="flex flex-grow flex-col">
         <div ref={cardDisplayRef}
              className="flex-grow overflow-hidden">
-            <div ref={animationParent} className="w-full h-full grid grid-rows-[repeat(auto-fit,minmax(280px,1fr))] grid-cols-[repeat(auto-fit,minmax(202px,1fr))]">
+            <div ref={animationParent}
+                 className="w-full h-full grid grid-rows-[repeat(auto-fit,minmax(280px,1fr))] grid-cols-[repeat(auto-fit,minmax(202px,1fr))]">
                 {
                     filteredCards
                         .slice(cardsVisible * (pageStore.page - 1), cardsVisible * pageStore.page)
                         .map((card) => {
-                            return <CardInstance key={crypto.randomUUID()} card={card}/>
+                            return <CardInstance key={card.octgn_id} card={card}/>
                         })
                 }
             </div>
-            
+
         </div>
         <div className="h-10 flex items-center justify-center w-full overflow-hidden">
             <Pagination total={Math.floor(filteredCards.length / cardsVisible)} className="pf-0" page={pageStore.page}
@@ -94,13 +86,16 @@ function CardInstance({card}: { card: Card }) {
                         <div className="p-10 flex flex-col">
                             <p className="text-3xl text-foreground font-bold mb-4">{card.name}</p>
                             <p className="text-xl text-foreground">
-                                <span className="font-bold tracking-wide whitespace-pre">Cost: </span>{card.cost ?? 0}</p>
+                                <span className="font-bold tracking-wide whitespace-pre">Cost: </span>{card.cost ?? 0}
+                            </p>
                             <p className="text-xl text-foreground">
                                 <span className="font-bold tracking-wide whitespace-pre">XP: </span>{card.xp ?? 0}</p>
                             <p className="text-xl text-foreground">
-                                <span className="font-bold tracking-wide whitespace-pre">Faction: </span>{card.faction_name}</p>
+                                <span
+                                    className="font-bold tracking-wide whitespace-pre">Faction: </span>{card.faction_name}
+                            </p>
                             <div className="flex-grow flex items-center justify-center">
-                                <p className="text-xl text-foreground">{parse(card.text)}</p>
+                                <p className="text-xl text-foreground">{parse(card.real_text ?? "")}</p>
                             </div>
                             <p className="text-xl text-foreground font-bold">{card.pack_name}</p>
                         </div>

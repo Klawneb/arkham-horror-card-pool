@@ -19,7 +19,7 @@ export default function PackFilter({ packs }: { packs: Pack[] | undefined }) {
     }
 
     return <div className="p-2 h-1/2">
-        <ScrollShadow className="overflow-auto w-full h-full" hideScrollBar>
+        <ScrollShadow className="overflow-x-hidden w-full h-full">
         {
             packs
                 .sort((a, b) => a.cycle_position - b.cycle_position)
@@ -58,14 +58,16 @@ function PackSelector({ pack, campaigns }: { pack: Pack, campaigns: Map<number, 
         }
     }
     
-    return <div className="mb-1 flex flex-col">
+    return <div className="m-2 flex flex-col">
         { campaigns.has(pack.cycle_position) && pack.position === 1 ?
-            <div className="mb-1">
-                <Checkbox onValueChange={handleCampaignChange}>{campaigns.get(pack.cycle_position)?.name}</Checkbox>
+            <div className="flex items-center">
+                <Checkbox className="p-0 mb-3" onValueChange={handleCampaignChange}>{campaigns.get(pack.cycle_position)?.name} Campaign</Checkbox>
             </div>
             :
             null
         }
-        <Checkbox className={`${campaigns.has(pack.cycle_position) ? "ml-3" : ""}`} onValueChange={handlePackChange} isSelected={filterStore.filter.codes.has(pack.code)}>{pack.name}</Checkbox>
+        <div className="flex items-center">
+            <Checkbox className={`p-0 mb-1 ${campaigns.has(pack.cycle_position) ? "ml-3" : ""}`} onValueChange={handlePackChange} isSelected={filterStore.filter.codes.has(pack.code)}>{pack.name}</Checkbox>
+        </div>
     </div>
 }

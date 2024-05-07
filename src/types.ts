@@ -45,11 +45,6 @@ export interface Card {
     imagesrc:                string;
 }
 
-
-export interface Filter {
-    codes: Set<string>
-}
-
 export interface Campaign {
     name: string,
     cycle_position: number;
