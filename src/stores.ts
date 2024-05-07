@@ -3,7 +3,8 @@
 export interface Filter {
     codes: Set<string>,
     searchTerm: string,
-    searchType: string
+    searchType: string,
+    factions: string[],
 }
 
 interface FilterState {
@@ -12,13 +13,15 @@ interface FilterState {
     removeCode: (code: string) => void,
     setSearchTerm: (searchTerm: string) => void,
     setSearchType: (searchType: string) => void,
+    setFactions: (factions: string[]) => void,
 }
 
 export const useFilterStore = create<FilterState>()((set) => ({
     filter: {
         codes: new Set<string>(),
         searchTerm: "",
-        searchType: "title"
+        searchType: "title",
+        factions: []
     },
     addCode: (code: string) => set((state) => ({
         filter: {
@@ -46,6 +49,12 @@ export const useFilterStore = create<FilterState>()((set) => ({
         filter: {
             ...state.filter,
             searchType: searchType
+        }
+    })),
+    setFactions: (factions: string[]) => set((state) => ({
+        filter: {
+            ...state.filter,
+            factions: factions
         }
     }))
 }))
