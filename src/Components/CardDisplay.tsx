@@ -58,8 +58,8 @@ export default function CardDisplay() {
 
     return <div className="flex flex-grow flex-col">
         <div ref={cardDisplayRef}
-             className="flex-grow ">
-            <div ref={animationParent} className="w-full h-full grid grid-rows-[repeat(auto-fit,minmax(280px,1fr))] grid-cols-[repeat(auto-fit,minmax(202px,1fr))] overflow-hidden">
+             className="flex-grow overflow-hidden">
+            <div ref={animationParent} className="w-full h-full grid grid-rows-[repeat(auto-fit,minmax(280px,1fr))] grid-cols-[repeat(auto-fit,minmax(202px,1fr))]">
                 {
                     filteredCards
                         .slice(cardsVisible * (pageStore.page - 1), cardsVisible * pageStore.page)
