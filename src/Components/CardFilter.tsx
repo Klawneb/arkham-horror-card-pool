@@ -14,7 +14,7 @@ export default function CardFilterSelector() {
     const packs = useQuery({ queryKey: ["packs"], queryFn: getPacks})
     
     return <div className="w-96 h-screen">
-        <Card className="flex flex-col h-full">
+        <Card className="flex flex-col h-full" radius="none">
             <h1 className="text-center font-bold text-2xl">Arkham Horror Card Search</h1>
             <TextFilter/>
             <Divider/>
