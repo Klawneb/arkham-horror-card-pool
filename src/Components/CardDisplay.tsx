@@ -94,8 +94,14 @@ function CardInstance({card}: { card: Card }) {
                                 <span
                                     className="font-bold tracking-wide whitespace-pre">Faction: </span>{card.faction_name}
                             </p>
-                            <div className="flex-grow flex items-center justify-center">
+                            <div className="flex-grow flex flex-col items-center justify-center">
                                 <p className="text-xl text-foreground">{parse(card.real_text ?? "")}</p>
+                                {
+                                    card.back_text ?
+                                        <p className="text-xl text-foreground mt-6">{parse(card.back_text ?? "")}</p>
+                                        :
+                                        null
+                                }
                             </div>
                             <p className="text-xl text-foreground font-bold">{card.pack_name}</p>
                         </div>
