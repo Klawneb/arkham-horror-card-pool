@@ -2,7 +2,7 @@
 import {Filter} from "./stores.ts";
 
 export function filterCards(filter: Filter, cards: Card[]) {
-    const filters = [filterCode, filterSearchTerm, filterFaction];
+    const filters = [filterCode, filterSearchTerm, filterFaction, filterXPCost];
     let filteredCards = [...cards];
     
     for (const f of filters) {
@@ -46,5 +46,15 @@ function filterFaction(filter: Filter, cards: Card[]) {
 
     return cards.filter((card) => {
         return filter.factions.includes(card.faction_code)
+    })
+}
+
+function filterXPCost(filter: Filter, cards: Card[]) {
+    if (filter.xpCost.length === 0) {
+        return cards;
+    }
+    
+    return cards.filter((card) => {
+        return filter.xpCost.includes(card.xp)
     })
 }

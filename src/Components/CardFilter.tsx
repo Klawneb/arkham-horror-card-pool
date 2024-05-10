@@ -4,6 +4,8 @@ import {Card, Divider} from "@nextui-org/react";
 import PackFilter from "./PackFilter.tsx";
 import TextFilter from "./TextFilter.tsx";
 import FactionFilter from "./FactionFilter.tsx";
+import XPFilter from "./XPFilter.tsx";
+
 
 async function getPacks(): Promise<Pack[]> {
     const packs = await fetch("https://arkhamdb.com/api/public/packs/");
@@ -22,6 +24,8 @@ export default function CardFilterSelector() {
             <PackFilter packs={packs.data}/>
             <Divider/>
             <FactionFilter/>
+            <Divider/>
+            <XPFilter/>
         </Card>
     </div>
 }
