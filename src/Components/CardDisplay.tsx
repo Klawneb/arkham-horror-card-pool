@@ -13,7 +13,7 @@ export default function CardDisplay() {
     const cardDisplayRef = useRef<HTMLDivElement>(null);
     const [cardsVisible, setCardsVisible] = useState(0)
     const pageStore = usePageStore()
-    const filteredCards = filterCards(filterStore.filter, cards.data ? cards.data : [])
+    const filteredCards = filterCards(filterStore.filter, cards.data ? cards.data : [], cardsVisible)
     const [animationParent] = useAutoAnimate()
 
     useEffect(() => {

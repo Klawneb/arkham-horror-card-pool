@@ -1,12 +1,17 @@
 ﻿import {Card} from "./types.ts";
-import {Filter} from "./stores.ts";
+import {Filter, usePageStore} from "./stores.ts";
 
-export function filterCards(filter: Filter, cards: Card[]) {
+export function filterCards(filter: Filter, cards: Card[], cardsVisible: number) {
     const filters = [filterCode, filterSearchTerm, filterFaction, filterXPCost];
     let filteredCards = [...cards];
+    const pageStore = usePageStore.getState();
     
     for (const f of filters) {
         filteredCards = f(filter, filteredCards);
+    }
+    
+    if ((filteredCards.length/cardsVisible)<pageStore.page) {
+        pageStore.setPage(Math.floor(filteredCards.length/cardsVisible));
     }
     
     return filteredCards;
