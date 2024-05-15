@@ -6,12 +6,16 @@ export function filterCards(filter: Filter, cards: Card[], cardsVisible: number)
     let filteredCards = [...cards];
     const pageStore = usePageStore.getState();
     
+    if (cards.length === 0) {
+        return []
+    }
+    
     for (const f of filters) {
         filteredCards = f(filter, filteredCards);
     }
     
-    if ((filteredCards.length/cardsVisible)<pageStore.page) {
-        pageStore.setPage(Math.floor(filteredCards.length/cardsVisible));
+    if ((filteredCards.length/cardsVisible)<pageStore.page && pageStore.page != 1) {
+        pageStore.setPage(1)
     }
     
     return filteredCards;
