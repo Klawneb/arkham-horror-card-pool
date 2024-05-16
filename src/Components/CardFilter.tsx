@@ -5,6 +5,7 @@ import PackFilter from "./PackFilter.tsx";
 import TextFilter from "./TextFilter.tsx";
 import FactionFilter from "./FactionFilter.tsx";
 import XPFilter from "./XPFilter.tsx";
+import CostFilter from "./CostFilter.tsx";
 
 
 async function getPacks(): Promise<Pack[]> {
@@ -26,6 +27,8 @@ export default function CardFilterSelector() {
             <FactionFilter/>
             <Divider/>
             <XPFilter/>
+            <Divider/>
+            <CostFilter/>
         </Card>
     </div>
 }

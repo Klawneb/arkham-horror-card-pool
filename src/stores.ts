@@ -6,6 +6,7 @@ export interface Filter {
     searchType: string,
     factions: string[],
     xpCost: number[]
+    resourceCosts: number[]
 }
 
 interface FilterState {
@@ -16,6 +17,7 @@ interface FilterState {
     setSearchType: (searchType: string) => void,
     setFactions: (factions: string[]) => void,
     setXpCost: (xpCost: number[]) => void,
+    setResourceCosts: (resourceCosts: number[]) => void,
 }
 
 export const useFilterStore = create<FilterState>()((set) => ({
@@ -24,7 +26,8 @@ export const useFilterStore = create<FilterState>()((set) => ({
         searchTerm: "",
         searchType: "title",
         factions: [],
-        xpCost: []
+        xpCost: [],
+        resourceCosts: []
     },
     addCode: (code: string) => set((state) => ({
         filter: {
@@ -64,6 +67,12 @@ export const useFilterStore = create<FilterState>()((set) => ({
         filter: {
             ...state.filter,
             xpCost: xpCost
+        }
+    })),
+    setResourceCosts: (resourceCosts: number[]) => set((state) => ({
+        filter: {
+            ...state.filter,
+            resourceCosts: resourceCosts
         }
     })),
 }))

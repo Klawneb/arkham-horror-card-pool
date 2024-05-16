@@ -2,7 +2,7 @@
 import {Filter, usePageStore} from "./stores.ts";
 
 export function filterCards(filter: Filter, cards: Card[], cardsVisible: number) {
-    const filters = [filterCode, filterSearchTerm, filterFaction, filterXPCost];
+    const filters = [filterCode, filterSearchTerm, filterFaction, filterXPCost, filterResourceCost];
     let filteredCards = [...cards];
     const pageStore = usePageStore.getState();
     
@@ -65,5 +65,15 @@ function filterXPCost(filter: Filter, cards: Card[]) {
     
     return cards.filter((card) => {
         return filter.xpCost.includes(card.xp)
+    })
+}
+
+function filterResourceCost(filter: Filter, cards: Card[]) {
+    if (filter.resourceCosts.length === 0) {
+        return cards;
+    }
+
+    return cards.filter((card) => {
+        return filter.resourceCosts.includes(card.cost)
     })
 }
