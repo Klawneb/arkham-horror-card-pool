@@ -4,9 +4,10 @@ import {Card} from "../types.ts";
 import {useFilterStore, usePageStore} from "../stores.ts";
 import {Dispatch, RefObject, SetStateAction, useEffect, useRef, useState} from "react";
 import {useAutoAnimate} from "@formkit/auto-animate/react";
-import parse from "html-react-parser"
 import {filterCards} from "../cardFilter.ts";
 import useKeyDown from "../hooks/useKeyDown.ts";
+import parseCardText from "../cardTextParser.ts";
+import {Interweave} from "interweave";
 
 export default function CardDisplay() {
     const cards = useQuery({queryKey: ["cards"], queryFn: getCards});
@@ -161,10 +162,10 @@ function CardModal({card, isOpen, onOpenChange, showNextCard, showPrevCard}: Car
                                     className="font-bold tracking-wide whitespace-pre">Faction: </span>{card.faction_name}
                         </p>
                         <div className="flex-grow flex flex-col items-center justify-center">
-                            <p className="text-xl text-foreground">{parse(card.real_text ?? "")}</p>
+                            <Interweave className="text-xl text-foreground inl" content={parseCardText(card.real_text ?? "")}/>
                             {
                                 card.back_text ?
-                                    <p className="text-xl text-foreground mt-6">{parse(card.back_text ?? "")}</p>
+                                    <Interweave className="text-xl text-foreground mt-6" content={parseCardText(card.back_text ?? "")}/>
                                     :
                                     null
                             }
