@@ -43,11 +43,21 @@ export interface Card {
     octgn_id: string;
     url: string;
     imagesrc: string;
-    back_text?: string
+    back_text?: string;
+    backimagesrc?: string;
+    deck_options: Card[];
 }
 
 export interface Campaign {
     name: string,
     cycle_position: number;
     codes: string[];
+}
+
+export interface Card {
+    faction?: string[],
+    level: {
+        min: number,
+        max: number
+    }
 }

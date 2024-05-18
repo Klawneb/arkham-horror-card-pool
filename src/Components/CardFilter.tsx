@@ -6,6 +6,7 @@ import TextFilter from "./TextFilter.tsx";
 import FactionFilter from "./FactionFilter.tsx";
 import XPFilter from "./XPFilter.tsx";
 import CostFilter from "./CostFilter.tsx";
+import InvestigatorFilter from "./InvestigatorFilter.tsx";
 
 
 async function getPacks(): Promise<Pack[]> {
@@ -18,7 +19,7 @@ export default function CardFilterSelector() {
     const packs = useQuery({ queryKey: ["packs"], queryFn: getPacks})
     
     return <div className="w-96 h-screen">
-        <Card className="flex flex-col h-full" radius="none">
+        <Card className="flex flex-col h-full" radius="none" >
             <h1 className="text-center font-bold text-2xl">Arkham Horror Card Search</h1>
             <TextFilter/>
             <Divider/>
@@ -29,6 +30,8 @@ export default function CardFilterSelector() {
             <XPFilter/>
             <Divider/>
             <CostFilter/>
+            <Divider/>
+            <InvestigatorFilter/>
         </Card>
     </div>
 }

@@ -1,4 +1,5 @@
 ﻿import {create} from "zustand";
+import {Card} from "./types.ts";
 
 export interface Filter {
     codes: Set<string>,
@@ -6,7 +7,8 @@ export interface Filter {
     searchType: string,
     factions: string[],
     xpCost: number[]
-    resourceCosts: number[]
+    resourceCosts: number[],
+    investigator: Card | undefined,
 }
 
 interface FilterState {
@@ -18,6 +20,7 @@ interface FilterState {
     setFactions: (factions: string[]) => void,
     setXpCost: (xpCost: number[]) => void,
     setResourceCosts: (resourceCosts: number[]) => void,
+    setInvestigator: (deckOptions: Card | undefined) => void,
 }
 
 export const useFilterStore = create<FilterState>()((set) => ({
@@ -27,7 +30,8 @@ export const useFilterStore = create<FilterState>()((set) => ({
         searchType: "title",
         factions: [],
         xpCost: [],
-        resourceCosts: []
+        resourceCosts: [],
+        investigator: undefined,
     },
     addCode: (code: string) => set((state) => ({
         filter: {
@@ -73,6 +77,12 @@ export const useFilterStore = create<FilterState>()((set) => ({
         filter: {
             ...state.filter,
             resourceCosts: resourceCosts
+        }
+    })),
+    setInvestigator: (investigator: Card | undefined) => set((state) => ({
+        filter: {
+            ...state.filter,
+            investigator: investigator
         }
     })),
 }))

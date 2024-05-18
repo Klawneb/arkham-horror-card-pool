@@ -2,7 +2,7 @@
 import {Filter, usePageStore} from "./stores.ts";
 
 export function filterCards(filter: Filter, cards: Card[], cardsVisible: number) {
-    const filters = [filterCode, filterSearchTerm, filterFaction, filterXPCost, filterResourceCost];
+    const filters = [filterCode, filterSearchTerm, filterFaction, filterXPCost, filterResourceCost, filterDeckOptions];
     let filteredCards = [...cards];
     const pageStore = usePageStore.getState();
     
@@ -75,5 +75,36 @@ function filterResourceCost(filter: Filter, cards: Card[]) {
 
     return cards.filter((card) => {
         return filter.resourceCosts.includes(card.cost)
+    })
+}
+
+function filterDeckOptions(filter: Filter, cards: Card[]) {
+    if (filter.investigator === undefined) {
+        return cards;
+    }
+    
+    return cards.filter((card) => {
+        if (card.type_code === "investigator") {
+            return false
+        }
+        
+        /* TODO 
+            - implement more card checks for unique items
+            - convert entire card type json to type object
+        */
+        
+        let validCard = false
+        filter.investigator?.deck_options.forEach((option) => {
+            if (card.xp >= option.level.max && card.xp <= option.level.min) {
+                return;
+            }
+
+            if ('faction' in option) {
+                if (option.faction?.includes(card.faction_code)) {
+                    validCard = true;
+                }
+            }
+        })
+        return validCard;
     })
 }

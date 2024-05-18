@@ -1,22 +1,22 @@
-﻿import {useQuery} from "@tanstack/react-query";
-import {Image, Modal, ModalBody, ModalContent, Pagination, Spinner, useDisclosure} from "@nextui-org/react";
+﻿import {Image, Modal, ModalBody, ModalContent, Pagination, Spinner, useDisclosure} from "@nextui-org/react";
 import {Card} from "../types.ts";
 import {useFilterStore, usePageStore} from "../stores.ts";
-import {Dispatch, RefObject, SetStateAction, useEffect, useRef, useState} from "react";
+import {Dispatch, RefObject, SetStateAction, useContext, useEffect, useRef, useState} from "react";
 import {useAutoAnimate} from "@formkit/auto-animate/react";
 import {filterCards} from "../cardFilter.ts";
 import useKeyDown from "../hooks/useKeyDown.ts";
 import parseCardText from "../cardTextParser.ts";
 import {Interweave} from "interweave";
+import {CardContext} from "../App.tsx";
 
 export default function CardDisplay() {
-    const cards = useQuery({queryKey: ["cards"], queryFn: getCards});
     const filterStore = useFilterStore();
+    const cards = useContext(CardContext)
     const cardDisplayRef = useRef<HTMLDivElement>(null);
     const [cardsVisible, setCardsVisible] = useState(0)
     const [modalCard, setModalCard] = useState<Card | undefined>()
     const pageStore = usePageStore()
-    const filteredCards = filterCards(filterStore.filter, cards.data ? cards.data : [], cardsVisible)
+    const filteredCards = filterCards(filterStore.filter, cards, cardsVisible)
     const [animationParent] = useAutoAnimate()
     const {isOpen, onOpen, onOpenChange} = useDisclosure();
     useKeyDown(showNextCard, ["ArrowRight"]);
@@ -43,19 +43,14 @@ export default function CardDisplay() {
         }
     }, [])
 
-    async function getCards(): Promise<Card[]> {
-        const cards = await fetch("https://arkhamdb.com/api/public/cards/");
-
-        return await cards.json();
-    }
-
     function showNextCard() {
         if (!modalCard) {
             return;
         }
 
         const cardIndex = filteredCards.findIndex((card) => card === modalCard);
-        setModalCard(filteredCards[Math.min(cardIndex + 1, filteredCards.length)]);
+        console.log(filteredCards.length)
+        setModalCard(filteredCards[Math.min(cardIndex + 1, filteredCards.length-1)]);
     }
 
     function showPrevCard() {
@@ -67,7 +62,7 @@ export default function CardDisplay() {
         setModalCard(filteredCards[Math.max(cardIndex - 1, 0)]);
     }
 
-    if (cards.data === undefined) {
+    if (cards.length === 0) {
         return <div ref={cardDisplayRef} className="flex flex-grow items-center justify-center">
             <Spinner label="Loading cards..." size="lg"/>
         </div>
@@ -129,7 +124,7 @@ function CardModal({card, isOpen, onOpenChange, showNextCard, showPrevCard}: Car
     return <Modal isOpen={isOpen} onOpenChange={onOpenChange} hideCloseButton={true} size="5xl" backdrop={"blur"}
                   className="border-0 dark">
 
-        <ModalContent className="bg-zinc-800 overflow-visible">
+        <ModalContent className="bg-zinc-800 overflow-visible"> 
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2}
                  stroke="currentColor"
                  className="w-20 h-20 absolute -left-24 top-1/2 transform -translate-y-1/2 stroke-foreground transition-all hover:cursor-pointer hover:h-28 hover:w-28 hover:-left-28"
@@ -147,8 +142,20 @@ function CardModal({card, isOpen, onOpenChange, showNextCard, showPrevCard}: Car
             <ModalBody className="p-0">
                 <div className="flex">
                     <div className="min-w-[432px] min-h-[600px]">
-                        <Image src={"https://arkhamdb.com/" + card.imagesrc} height={600} width={432}
-                               className="min-w-[432px] min-h-[600px] select-none"/>
+                        {
+                            card.type_code === "investigator" ?
+                                <div className={"w-full h-full flex flex-col items-center justify-center"}>
+                                    <Image src={"https://arkhamdb.com/" + card.imagesrc}
+                                           className=""/>
+                                    <Image src={"https://arkhamdb.com/" + card.backimagesrc}
+                                           className=""/>
+                                </div>
+                                
+                                :
+                                <Image src={"https://arkhamdb.com/" + card.imagesrc} height={600} width={432}
+                                       className=""/>
+                        }
+                        
                     </div>
                     <div className="p-10 flex flex-col">
                         <p className="text-3xl text-foreground font-bold mb-4">{card.name}</p>
