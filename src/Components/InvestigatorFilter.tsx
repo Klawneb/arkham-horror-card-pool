@@ -4,6 +4,7 @@ import {CardContext} from "../App.tsx";
 import {Card} from "../types.ts";
 import {useFilterStore} from "../stores.ts";
 import {factionColors} from "../utils.ts";
+import ReactCardFlip from "react-card-flip";
 
 export default function InvestigatorFilter() {
     const cards = useContext(CardContext);
@@ -11,6 +12,7 @@ export default function InvestigatorFilter() {
     const investigators = cards.filter(card => card.type_code === "investigator");
     const [selectedID, setSelectedID] = useState<string>("");
     const [selectedInvestigator, setSelectedInvestigator] = useState<Card | undefined>(undefined);
+    const [isFlipped, setIsFlipped] = useState(false)
 
     function handleSelectionChange(selection: string | number | null) {
         const newSelectedID = selection ? selection.toString() : "";
@@ -33,7 +35,10 @@ export default function InvestigatorFilter() {
         </Autocomplete>
         {
             selectedInvestigator ?
-                <Image src={"https://arkhamdb.com/" + selectedInvestigator?.imagesrc} className={"mt-2"}/>
+                <ReactCardFlip isFlipped={isFlipped} flipDirection="horizontal" containerClassName={"hover:cursor-pointer"}>
+                    <Image src={"https://arkhamdb.com/" + selectedInvestigator?.imagesrc} className={"mt-2"} onClick={() => setIsFlipped(state => !state)}/>
+                    <Image src={"https://arkhamdb.com/" + selectedInvestigator?.backimagesrc} className={"mt-2"} onClick={() => setIsFlipped(state => !state)}/>
+                </ReactCardFlip>
                 :
                 null
         }

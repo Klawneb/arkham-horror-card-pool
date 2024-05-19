@@ -96,11 +96,6 @@ function filterDeckOptions(filter: Filter, cards: Card[]) {
             return filter.investigator.code in card.restrictions.investigator;
         }
         
-        /* TODO 
-            - implement more card checks for unique items
-            - convert entire card type json to type object
-        */
-        
         let validCard = false
         filter.investigator?.deck_options.forEach((option) => {
             if (card.xp >= option.level.max && card.xp <= option.level.min) {
