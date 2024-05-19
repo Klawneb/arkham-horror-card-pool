@@ -88,6 +88,14 @@ function filterDeckOptions(filter: Filter, cards: Card[]) {
             return false
         }
         
+        if (card.type_code === "enemy" || card.type_code === "treachery") {
+            return false
+        }
+        
+        if ("restrictions" in card && filter.investigator) {
+            return filter.investigator.code in card.restrictions.investigator;
+        }
+        
         /* TODO 
             - implement more card checks for unique items
             - convert entire card type json to type object

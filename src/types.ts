@@ -46,6 +46,11 @@ export interface Card {
     back_text?: string;
     backimagesrc?: string;
     deck_options: Card[];
+    restrictions: {
+        investigator: {
+            [key: string]: string;
+        }
+    }
 }
 
 export interface Campaign {

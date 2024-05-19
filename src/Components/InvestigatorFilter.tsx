@@ -3,6 +3,7 @@ import {useContext, useState} from "react";
 import {CardContext} from "../App.tsx";
 import {Card} from "../types.ts";
 import {useFilterStore} from "../stores.ts";
+import {factionColors} from "../utils.ts";
 
 export default function InvestigatorFilter() {
     const cards = useContext(CardContext);
@@ -24,8 +25,9 @@ export default function InvestigatorFilter() {
     return <div className="p-4 h-[400px]">
         <Autocomplete label={"Investigator Filter"} scrollShadowProps={{ isEnabled: false }} selectedKey={selectedID} onSelectionChange={handleSelectionChange}>
             {
-                investigators.map((investigator) => {
-                    return <AutocompleteItem key={investigator.octgn_id}>{investigator.name}</AutocompleteItem>
+                investigators.sort((a,b) => a.faction_code < b.faction_code ? a.faction_code > b.faction_code ? 1 : -1 : 0)
+                    .map((investigator) => {
+                    return <AutocompleteItem className={`${factionColors.get(investigator.faction_code)} bg-opacity-25`} key={investigator.octgn_id} endContent={investigator.pack_name.replace("Investigator Expansion", "")}>{investigator.name}</AutocompleteItem>
                 })
             }
         </Autocomplete>
