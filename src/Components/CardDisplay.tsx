@@ -100,7 +100,7 @@ interface CardInstanceProps {
 
 function CardInstance({card, onOpen, setModalCard}: CardInstanceProps) {
     return <div className="h-[280px] flex flex-col items-center justify-center">
-        <Image src={"https://arkhamdb.com/" + card.imagesrc} height={280} width={202} onClick={() => {
+        <Image src={"https://arkhamdb.com/" + card.imagesrc} fallbackSrc={"public/missing.png"} height={280} width={202} onClick={() => {
             setModalCard(card)
             onOpen();
         }}
@@ -146,14 +146,14 @@ function CardModal({card, isOpen, onOpenChange, showNextCard, showPrevCard}: Car
                             card.type_code === "investigator" ?
                                 <div className={"w-full h-full flex flex-col items-center justify-center"}>
                                     <Image src={"https://arkhamdb.com/" + card.imagesrc}
-                                           className=""/>
+                                           fallbackSrc={"public/missing.png"}/>
                                     <Image src={"https://arkhamdb.com/" + card.backimagesrc}
-                                           className=""/>
+                                           fallbackSrc={"public/missing.png"}/>
                                 </div>
                                 
                                 :
                                 <Image src={"https://arkhamdb.com/" + card.imagesrc} height={600} width={432}
-                                       className=""/>
+                                       fallbackSrc={"public/missing.png"}/>
                         }
                         
                     </div>
