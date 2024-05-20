@@ -37,8 +37,8 @@ export default function InvestigatorFilter() {
             selectedInvestigator ?
                 <>
                     <ReactCardFlip isFlipped={isFlipped} flipDirection="horizontal" containerClassName={"hover:cursor-pointer"}>
-                        <Image src={"https://arkhamdb.com/" + selectedInvestigator?.imagesrc} fallbackSrc={"public/missing.png"} className={"mt-2 w-[352px] h-[251px]"} onClick={() => setIsFlipped(state => !state)}/>
-                        <Image src={"https://arkhamdb.com/" + selectedInvestigator?.backimagesrc} fallbackSrc={"public/missing.png"} className={"mt-2 w-[352px] h-[251px]"} onClick={() => setIsFlipped(state => !state)}/>
+                        <Image src={"https://arkhamdb.com/" + selectedInvestigator?.imagesrc} fallbackSrc={"missing.png"} className={"mt-2 w-[352px] h-[251px]"} onClick={() => setIsFlipped(state => !state)}/>
+                        <Image src={"https://arkhamdb.com/" + selectedInvestigator?.backimagesrc} fallbackSrc={"missing.png"} className={"mt-2 w-[352px] h-[251px]"} onClick={() => setIsFlipped(state => !state)}/>
                     </ReactCardFlip>
                     <p className="text-center text-xs text-foreground-500">Click to flip!</p>
                 </>
