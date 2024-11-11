@@ -53,6 +53,13 @@ export interface Card {
     }
 }
 
+export interface Deck {
+    name: string,
+    cards: Card[],
+    investigator?: Card,
+    id: string
+}
+
 export interface Campaign {
     name: string,
     cycle_position: number;

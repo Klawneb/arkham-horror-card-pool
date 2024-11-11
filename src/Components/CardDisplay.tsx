@@ -1,5 +1,17 @@
-﻿import {Image, Modal, ModalBody, ModalContent, Pagination, Spinner, useDisclosure} from "@nextui-org/react";
-import {Card} from "../types.ts";
+﻿import {
+    Button,
+    Divider,
+    Image,
+    Modal,
+    ModalBody,
+    ModalContent,
+    Pagination,
+    Select, Selection,
+    SelectItem,
+    Spinner,
+    useDisclosure
+} from "@nextui-org/react";
+import {Card, Deck} from "../types.ts";
 import {useFilterStore, usePageStore} from "../stores.ts";
 import {Dispatch, RefObject, SetStateAction, useContext, useEffect, useRef, useState} from "react";
 import {useAutoAnimate} from "@formkit/auto-animate/react";
@@ -8,6 +20,8 @@ import useKeyDown from "../hooks/useKeyDown.ts";
 import parseCardText from "../cardTextParser.ts";
 import {Interweave} from "interweave";
 import {CardContext} from "../App.tsx";
+import {useLocalStorage} from "usehooks-ts";
+import {addCardToDeck, isCardMaxCopies} from "../utils.ts";
 
 export default function CardDisplay() {
     const filterStore = useFilterStore();
@@ -117,8 +131,31 @@ interface CardModalProps {
 }
 
 function CardModal({card, isOpen, onOpenChange, showNextCard, showPrevCard}: CardModalProps) {
+    const [decks] = useLocalStorage<Deck[]>("decks", []);
+    const [selectedDeckID, setSelectedDeckID] = useState<string | null>(null);
+    const [cardMaxCopies, setCardMaxCopies] = useState(false);
+    
     if (!card) {
         return null
+    }
+    
+    function handleDeckSelectionChange(keys: Selection) {
+        if (typeof keys === "string") {
+            setSelectedDeckID(keys)
+        } else {
+            const IDs = Array.from(keys);
+            if (IDs.length > 0) {
+                setSelectedDeckID(IDs[0].toString());
+            }
+        }
+    }
+    
+    function handleAddCard() {
+        if (card && selectedDeckID) {
+            addCardToDeck(card, selectedDeckID);
+            setCardMaxCopies(isCardMaxCopies(card, selectedDeckID));
+        }
+        
     }
 
     return <Modal isOpen={isOpen} onOpenChange={onOpenChange} hideCloseButton={true} size="5xl" backdrop={"blur"}
@@ -157,7 +194,7 @@ function CardModal({card, isOpen, onOpenChange, showNextCard, showPrevCard}: Car
                         }
                         
                     </div>
-                    <div className="p-10 flex flex-col">
+                    <div className="p-10 flex flex-col flex-grow">
                         <p className="text-3xl text-foreground font-bold mb-4">{card.name}</p>
                         <p className="text-xl text-foreground">
                             <span className="font-bold tracking-wide whitespace-pre">Cost: </span>{card.cost ?? 0}
@@ -168,7 +205,7 @@ function CardModal({card, isOpen, onOpenChange, showNextCard, showPrevCard}: Car
                                 <span
                                     className="font-bold tracking-wide whitespace-pre">Faction: </span>{card.faction_name}
                         </p>
-                        <div className="flex-grow flex flex-col items-center justify-center">
+                        <div className="flex-grow flex flex-col justify-center">
                             <Interweave className="text-xl text-foreground inl" content={parseCardText(card.real_text ?? "")}/>
                             {
                                 card.back_text ?
@@ -177,7 +214,25 @@ function CardModal({card, isOpen, onOpenChange, showNextCard, showPrevCard}: Car
                                     null
                             }
                         </div>
-                        <p className="text-xl text-foreground font-bold">{card.pack_name}</p>
+                        <p className="text-xl text-foreground font-bold">{card.pack_name}</p>   
+                        <Divider/>
+                        <div className="mt-8">
+                            <div className="flex items-center justify-between">
+                                <p className="font-bold">Add to deck:</p>
+                                <div className="flex items-center w-80">
+                                    <Select selectionMode={"single"} size={"sm"} label={"Select deck"} onSelectionChange={handleDeckSelectionChange} classNames={{
+                                        trigger: "bg-zinc-900"
+                                    }}>
+                                        {
+                                            decks.map(deck => {
+                                                return <SelectItem key={deck.id}>{deck.name}</SelectItem>
+                                            })
+                                        }
+                                    </Select>
+                                    <Button className="ml-2" onClick={handleAddCard} disabled={cardMaxCopies} color={cardMaxCopies ? "danger" : "primary"}>Add</Button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </ModalBody>

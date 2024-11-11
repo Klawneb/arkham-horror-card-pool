@@ -24,7 +24,7 @@ export default function InvestigatorFilter() {
         }
     }
     
-    return <div className="p-4 h-[400px]">
+    return <div className="p-4 h-[500px]">
         <Autocomplete label={"Investigator Filter"} scrollShadowProps={{ isEnabled: false }} selectedKey={selectedID} onSelectionChange={handleSelectionChange}>
             {
                 investigators.sort((a,b) => a.faction_code < b.faction_code ? a.faction_code > b.faction_code ? 1 : -1 : 0)
