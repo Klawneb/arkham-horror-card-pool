@@ -102,6 +102,17 @@ function filterDeckOptions(filter: Filter, cards: Card[]) {
                 if (option.faction?.includes(card.faction_code)) {
                     validCard = true;
                 }
+                
+                const cardTraits = card.traits?.split(".").map(trait => trait.toLowerCase().trim());
+                if (cardTraits) {
+                    option.trait?.forEach((trait) => {
+                        console.log(cardTraits)
+                        console.log(trait)
+                        if (cardTraits.includes(trait)) {
+                            validCard = true;
+                        }
+                    })
+                }
             }
         })  
         return validCard;
