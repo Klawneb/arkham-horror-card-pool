@@ -45,11 +45,20 @@ export interface Card {
     imagesrc: string;
     back_text?: string;
     backimagesrc?: string;
-    deck_options: Card[];
+    deck_options: DeckOption[];
     restrictions: {
         investigator: {
             [key: string]: string;
         }
+    }
+}
+
+interface DeckOption {
+    faction?: string[],
+    trait?: string[],
+    level: {
+        min: number,
+        max: number
     }
 }
 

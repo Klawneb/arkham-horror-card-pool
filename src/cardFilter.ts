@@ -79,7 +79,7 @@ function filterResourceCost(filter: Filter, cards: Card[]) {
 }
 
 function filterDeckOptions(filter: Filter, cards: Card[]) {
-    if (filter.investigator === undefined) {
+    if (!filter.investigator) {
         return cards;
     }
     
@@ -97,17 +97,13 @@ function filterDeckOptions(filter: Filter, cards: Card[]) {
         }
         
         let validCard = false
-        filter.investigator?.deck_options.forEach((option) => {
-            if (card.xp >= option.level.max && card.xp <= option.level.min) {
-                return;
-            }
-
-            if ('faction' in option) {
+        filter.investigator!.deck_options.forEach((option) => {
+            if (card.xp >= option.level.min && card.xp <= option.level.max) {
                 if (option.faction?.includes(card.faction_code)) {
                     validCard = true;
                 }
             }
-        })
+        })  
         return validCard;
     })
 }
