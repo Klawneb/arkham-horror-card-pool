@@ -98,21 +98,34 @@ function filterDeckOptions(filter: Filter, cards: Card[]) {
         
         let validCard = false
         filter.investigator!.deck_options.forEach((option) => {
-            if (card.xp >= option.level.min && card.xp <= option.level.max) {
-                if (option.faction?.includes(card.faction_code)) {
-                    validCard = true;
-                }
+            if (option.level && !(card.xp >= option.level.min && card.xp <= option.level.max)) {
+                return
+            }
+            
+            if (option.faction?.includes(card.faction_code)) {
+                validCard = true;
+            }
                 
-                const cardTraits = card.traits?.split(".").map(trait => trait.toLowerCase().trim());
-                if (cardTraits) {
-                    option.trait?.forEach((trait) => {
-                        console.log(cardTraits)
-                        console.log(trait)
-                        if (cardTraits.includes(trait)) {
-                            validCard = true;
-                        }
-                    })
-                }
+            const cardTraits = card.traits?.split(".").map(trait => trait.toLowerCase().trim());
+            if (cardTraits) {
+                option.trait?.forEach((trait) => {
+                    if (cardTraits.includes(trait)) {
+                        validCard = true;
+                    }
+                })
+            }
+
+            const cardTags = card.tags?.split(".").map(tag => tag.toLowerCase().trim());
+            if (cardTags) {
+                option.tag?.forEach((tag) => {
+                    if (cardTags.includes(tag)) {
+                        validCard = true;
+                    }
+                })
+            }
+
+            if (option.not) {
+                validCard = false;
             }
         })  
         return validCard;

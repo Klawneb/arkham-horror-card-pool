@@ -45,6 +45,7 @@ export interface Card {
     imagesrc: string;
     back_text?: string;
     backimagesrc?: string;
+    tags?: string;
     deck_options: DeckOption[];
     restrictions: {
         investigator: {
@@ -56,7 +57,9 @@ export interface Card {
 interface DeckOption {
     faction?: string[],
     trait?: string[],
-    level: {
+    not?: boolean,
+    tag?: string[],
+    level?: {
         min: number,
         max: number
     }
