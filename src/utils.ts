@@ -39,8 +39,6 @@ function updateDeckList(newDeck: Deck): void {
     
     deckList.push(newDeck);
     localStorage.setItem("decks", JSON.stringify(deckList));
-    
-    console.log(JSON.parse(localStorage.getItem("decks") as string));
 }
 
 function getDeck(id: string) {

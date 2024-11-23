@@ -63,7 +63,6 @@ export default function CardDisplay() {
         }
 
         const cardIndex = filteredCards.findIndex((card) => card === modalCard);
-        console.log(filteredCards.length)
         setModalCard(filteredCards[Math.min(cardIndex + 1, filteredCards.length-1)]);
     }
 
@@ -113,11 +112,23 @@ interface CardInstanceProps {
 }
 
 function CardInstance({card, onOpen, setModalCard}: CardInstanceProps) {
+    if (card.type_code === "investigator") {
+        return <div className="h-[280px] flex flex-col items-center justify-center">
+            <Image src={"https://arkhamdb.com/" + card.imagesrc} fallbackSrc={"missing.png"} height={143} width={200}
+                   onClick={() => {
+                       setModalCard(card)
+                       onOpen();
+                   }}
+                   className="hover:cursor-pointer"/>
+        </div>
+    }
+
     return <div className="h-[280px] flex flex-col items-center justify-center">
-        <Image src={"https://arkhamdb.com/" + card.imagesrc} fallbackSrc={"missing.png"} height={280} width={202} onClick={() => {
-            setModalCard(card)
-            onOpen();
-        }}
+        <Image src={"https://arkhamdb.com/" + card.imagesrc} fallbackSrc={"missing.png"} height={280} width={202}
+               onClick={() => {
+                   setModalCard(card)
+                   onOpen();
+               }}
                className="hover:cursor-pointer"/>
     </div>
 }
