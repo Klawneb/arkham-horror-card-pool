@@ -1,6 +1,6 @@
 ﻿import {useQuery} from "@tanstack/react-query";
 import {Pack} from "../types.ts";
-import {Card, Divider, Tab, Tabs} from "@nextui-org/react";
+import {Card, Tab, Tabs} from "@nextui-org/react";
 import PackFilter from "./PackFilter.tsx";
 import TextFilter from "./TextFilter.tsx";
 import FactionFilter from "./FactionFilter.tsx";
@@ -22,26 +22,21 @@ export default function CardFilterSelector() {
     return <div className="w-96 h-screen">
         <Card className="flex h-full" radius="none">
             <Tabs fullWidth color={"primary"} size={"lg"} classNames={{
-                panel: "flex flex-col h-full p-0",
+                panel: "flex flex-col flex-1 overflow-auto",
                 tabList: "rounded-none"
             }}>
                 <Tab title={"Card Search"}>
                     <TextFilter/>
-                    <Divider/>
                     <PackFilter packs={packs.data}/>
-                    <Divider/>
                     <FactionFilter/>
-                    <Divider/>
                     <XPFilter/>
-                    <Divider/>
                     <CostFilter/>
-                    <Divider/>
-                    <InvestigatorFilter/>
                 </Tab>
                 <Tab title={"Decks"}>
                     <DeckList/>
                 </Tab>
             </Tabs>
+            <InvestigatorFilter/>
         </Card>
     </div>
 }

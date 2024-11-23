@@ -1,10 +1,10 @@
-﻿import {Autocomplete, AutocompleteItem, Image} from "@nextui-org/react";
+﻿import {Autocomplete, AutocompleteItem, Image, useDisclosure} from "@nextui-org/react";
 import {useContext, useState} from "react";
 import {CardContext} from "../App.tsx";
 import {Card} from "../types.ts";
 import {useFilterStore} from "../stores.ts";
 import {factionColors} from "../utils.ts";
-import ReactCardFlip from "react-card-flip";
+import {CardModal} from "./CardDisplay.tsx";
 
 export default function InvestigatorFilter() {
     const cards = useContext(CardContext);
@@ -12,7 +12,7 @@ export default function InvestigatorFilter() {
     const investigators = cards.filter(card => card.type_code === "investigator");
     const [selectedID, setSelectedID] = useState<string>("");
     const [selectedInvestigator, setSelectedInvestigator] = useState<Card | undefined>(undefined);
-    const [isFlipped, setIsFlipped] = useState(false)
+    const {isOpen, onOpen, onOpenChange} = useDisclosure();
 
     function handleSelectionChange(selection: string | number | null) {
         const newSelectedID = selection ? selection.toString() : "";
@@ -24,7 +24,7 @@ export default function InvestigatorFilter() {
         }
     }
     
-    return <div className="p-4 h-[500px]">
+    return <div className="p-4 h-[250px] max-h-[400px] flex flex-col flex-grow justify-self-end">
         <Autocomplete label={"Investigator Filter"} scrollShadowProps={{ isEnabled: false }} selectedKey={selectedID} onSelectionChange={handleSelectionChange}>
             {
                 investigators.sort((a,b) => a.faction_code < b.faction_code ? a.faction_code > b.faction_code ? 1 : -1 : 0)
@@ -33,17 +33,16 @@ export default function InvestigatorFilter() {
                 })
             }
         </Autocomplete>
-        {
-            selectedInvestigator ?
-                <>
-                    <ReactCardFlip isFlipped={isFlipped} flipDirection="horizontal" containerClassName={"hover:cursor-pointer"}>
-                        <Image src={"https://arkhamdb.com/" + selectedInvestigator?.imagesrc} fallbackSrc={"missing.png"} className={"mt-2 w-[352px] h-[251px]"} onClick={() => setIsFlipped(state => !state)}/>
-                        <Image src={"https://arkhamdb.com/" + selectedInvestigator?.backimagesrc} fallbackSrc={"missing.png"} className={"mt-2 w-[352px] h-[251px]"} onClick={() => setIsFlipped(state => !state)}/>
-                    </ReactCardFlip>
-                    <p className="text-center text-xs text-foreground-500">Click to flip!</p>
-                </>
-                :
-                null
-        }
+        <div className={"flex flex-grow items-center justify-center"}>
+            {
+                selectedInvestigator ?
+                    <Image src={"https://arkhamdb.com/" + selectedInvestigator?.imagesrc} onClick={() => {
+                        onOpen();
+                    }} fallbackSrc={"missing.png"} className={" w-[352px] h-[251px] cursor-pointer"}/>
+                    :
+                    <p className={"text-small text-center"}>Choose an investigator to filter to their card pool</p>
+            }
+        </div>
+        <CardModal card={selectedInvestigator} isOpen={isOpen} onOpenChange={onOpenChange}/>
     </div>
 }

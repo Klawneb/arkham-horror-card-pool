@@ -137,11 +137,11 @@ interface CardModalProps {
     card: Card | undefined,
     isOpen: boolean,
     onOpenChange: () => void,
-    showNextCard: () => void,
-    showPrevCard: () => void,
+    showNextCard?: () => void,
+    showPrevCard?: () => void,
 }
 
-function CardModal({card, isOpen, onOpenChange, showNextCard, showPrevCard}: CardModalProps) {
+export function CardModal({card, isOpen, onOpenChange, showNextCard, showPrevCard}: CardModalProps) {
     const [decks] = useLocalStorage<Deck[]>("decks", []);
     const [selectedDeckID, setSelectedDeckID] = useState<string | null>(null);
     const [cardMaxCopies, setCardMaxCopies] = useState(false);
@@ -172,21 +172,22 @@ function CardModal({card, isOpen, onOpenChange, showNextCard, showPrevCard}: Car
     return <Modal isOpen={isOpen} onOpenChange={onOpenChange} hideCloseButton={true} size="5xl" backdrop={"blur"}
                   className="border-0 dark">
 
-        <ModalContent className="bg-zinc-800 overflow-visible"> 
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2}
-                 stroke="currentColor"
-                 className="w-20 h-20 absolute -left-24 top-1/2 transform -translate-y-1/2 stroke-foreground transition-all hover:cursor-pointer hover:h-28 hover:w-28 hover:-left-28"
-                onClick={showPrevCard}>
+        <ModalContent className="bg-zinc-800 overflow-visible">
+            {showPrevCard && <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2}
+                  stroke="currentColor"
+                  className="w-20 h-20 absolute -left-24 top-1/2 transform -translate-y-1/2 stroke-foreground transition-all hover:cursor-pointer hover:h-28 hover:w-28 hover:-left-28"
+                  onClick={showPrevCard}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"/>
-            </svg>
+            </svg>}
 
 
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2}
-                 className="w-20 h-20 absolute -right-24 top-1/2 transform -translate-y-1/2 stroke-foreground transition-all hover:cursor-pointer hover:h-28 hover:w-28 hover:-right-28"
-                 onClick={showNextCard}
+            {showNextCard && <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2}
+                  className="w-20 h-20 absolute -right-24 top-1/2 transform -translate-y-1/2 stroke-foreground transition-all hover:cursor-pointer hover:h-28 hover:w-28 hover:-right-28"
+                  onClick={showNextCard}
             >
                 <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/>
-            </svg>
+            </svg>}
+
             <ModalBody className="p-0">
                 <div className="flex">
                     <div className="min-w-[432px] min-h-[600px]">

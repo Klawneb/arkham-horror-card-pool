@@ -18,7 +18,7 @@ export default function PackFilter({ packs }: { packs: Pack[] | undefined }) {
         return <Spinner/>
     }
 
-    return <div className="p-2 h-1/2 overflow-auto">
+    return <div className="p-2 flex flex-col flex-1 overflow-auto">
         {
             packs
                 .sort((a, b) => a.cycle_position - b.cycle_position)
