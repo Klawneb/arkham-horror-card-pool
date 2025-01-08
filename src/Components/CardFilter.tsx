@@ -7,8 +7,6 @@ import FactionFilter from "./FactionFilter.tsx";
 import XPFilter from "./XPFilter.tsx";
 import CostFilter from "./CostFilter.tsx";
 import InvestigatorFilter from "./InvestigatorFilter.tsx";
-import DeckList from "./DeckList.tsx";
-
 
 async function getPacks(): Promise<Pack[]> {
     const packs = await fetch("https://arkhamdb.com/api/public/packs/");
@@ -31,9 +29,6 @@ export default function CardFilterSelector() {
                     <FactionFilter/>
                     <XPFilter/>
                     <CostFilter/>
-                </Tab>
-                <Tab title={"Decks"}>
-                    <DeckList/>
                 </Tab>
             </Tabs>
             <InvestigatorFilter/>
